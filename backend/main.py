@@ -49,7 +49,19 @@ def retorna_nome(id):
 def retorna_preco(id):
     return lista_prod[id]["preco_cent"]
 
+def mostrar_carrinho(carrinho):
+    
+
 def adicionar_carrinho(id, qntd):
+    if id in carrinho:
+        carrinho[id]["qntd"] += qntd
+    else:
+        carrinho[id] = {
+            "id" : id,
+            "qntd" : qntd
+        }
+
+def remove_estoque(id, qntd):
     if id in carrinho:
         carrinho[id]["qntd"] += qntd
     else:
@@ -92,9 +104,9 @@ def finalizar_compra(carrinho, lista_prod, lista_promo):
         return False
     total = 0
     for id, item in carrinho.items():
-        if verifica_promocao(carrinho, lista_promo[1]["requisitos"]):
-            print(f"Promoção aplicada: {lista_promo[1]['descricao']}")
-            total += (item["qntd"] * retorna_preco(id)) * lista_promo[1]["desconto"]
-        elif verifica_promocao(carrinho, lista_promo[2]["requisitos"]):
-            print(f"Promoção aplicada: {lista_promo[2]['descricao']}")
-            total += (item["qntd"] * retorna_preco(id)) * lista_promo[2]["desconto"]
+        for promo in lista_promo.values():
+            if verifica_promocao(carrinho, promo["requisitos"]):
+                print(f"Promoção aplicada: {promo['descricao']}")
+
+                total += (item["qntd"] * retorna_preco(id)) * promo["desconto"]
+
